@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/styles.css">
+    <title>Jogo da Cobrinha</title>
+</head>
+<body>
+    <div>
+        <button class="btn btn-blue" onclick="abrir_instrucoes()">Instruções</button>
+    </div>
+    <div id="div_instrucoes">
+        <p> O objetivo do jogo é simples: comer o máximo de maçãs o possível!<br>
+        <p> Quanto mais maçãs você come, maior a cobra irá ficar.</p> <br>   
+        <p><strong>Cuidado:</strong> se a cabeça da cobra enconstar em alguma parte do seu próprio corpo você perde!</p>
+        <br>
+            Para movimentar a cobra basta usar as teclas abaixo:
+        </p>
+        <img src="../style/setas.jpeg" id="setas">
+        <button class="btn btn-red" onclick="fechar_instrucoes()">Fechar</button>
+    </div>
+    <div id="div_game">
+        <div id="div_recordes">
+            <h5>Recordes</h5>
+            <input type="text" name="recorde" id="recorde_input" value="0">
+        </div>
+        <button class="btn btn-green" id="start" onclick="start()">Iniciar</button> 
+        <canvas id="boardGame" width="512" height="512"></canvas>
+    </div>
+    
+    <script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+@font-face {
+    font-family: Game;
+    src: url(./fonts/zig_____.ttf);
+}
+
+body{
+    background-image: url("./fundo.jpg");
+    display: flex;
+}
+
+#div_game{
+    width: 1000px;
+    height: 600px;
+    padding: 5px;
+    margin-left: 10px;
+    
+}
+h5{
+    font-family: Game;
+}
+
+#boardGame{
+    margin-left: 200px;
+    margin-top: 2px;
+    background-color: #CCFF99;
+    border: 1px solid #000;
+}
+
+.btn{
+    font-family: Game;
+    color: black;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14pt;
+}
+
+.btn-green{
+    background-color: green;
+    box-shadow: 0 5px 0 #006000;
+}
+
+.btn-green:hover{
+    background-color: #006000;
+    box-shadow: 0 5px 0 #003f00;
+    color: white;
+}
+
+.btn-blue{
+    background-color: midnightblue;
+    box-shadow: rgb(2, 2, 48);
+}
+
+.btn-blue:hover{
+    background-color: rgb(2, 2, 48);
+    color: white;
+}
+
+.btn-red{
+    background-color: red;
+    margin-left: 75px;
+    margin-top: 80px;
+    position: absolute;
+}
+
+.btn-red:hover{
+    background-color: rgb(95, 8, 8);
+    color: white;
+}
+
+#start{
+    margin-top: 200px;
+    position: absolute;
+}
+
+#div_recordes{
+    width: 1000px;
+    display: flex;
+    flex: row;
+    justify-content:space-evenly;
+    align-items: center;
+    font-size: 14pt;
+}
+
+#recorde_input{
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-family: Game;
+}
+
+#div_instrucoes{
+    display: none;
+    background-color: #448c44;
+    font-family: Game;
+    width: 600px;
+    height: 400px;
+    margin-left: 150px;
+    margin-top: 100px;
+}
+
+#setas{
+    width: 150px;
+    height: 120px;
+    margin-left: 200px;
+}
+
+strong{
+    color: red;
+}
+
+@media(max-width: 820px){
+    #div_game{
+        width: 700px;
+        height: 1000px;
+        margin-top: 250px;
+    }
+
+    #boardGame{
+        margin-left: -45px;
+        margin-top: 2px;
+        position: absolute;
+    }
+
+    #div_instrucoes{
+        width: 500px;
+        height: 1000px;
+        margin-left: 15px;
+        margin-top: 50px;
+        font-size: 18pt;
+    }
+
+    #start{
+        margin-top: -150px;
+        position: absolute;
+    }
+    #div_recordes{
+        width: 800px;
+        margin-left: -65px;
+    }
+    .btn-red{
+        margin-left: 10px;
+        margin-top: 250px;
+    }
+    #setas{
+        width: 200px;
+        height: 150px;
+        margin-top: 65px;
+        margin-left: 150px;
+    }
+
+}
+
+@media(max-width: 400px){
+    #div_game{
+        width: 300px;
+        height: 200px;
+    }
+    #boardGame{
+        width: 300px;
+        margin-left: -145px;
+        margin-top: 2px;
+        position: absolute;
+    }
+
+    #div_instrucoes{
+        width: 300px;
+        height: 730px;
+        margin-left: -140px;
+        font-size: 16pt;
+    }
+    #setas{
+        margin-left: 80px;
+        width: 150px;
+        height: 100px;
+    }
+
+    .btn-red{
+        margin-left: -120px;
+        margin-top: 200px;
+    }
+    #div_recordes{
+        width: 800px;
+        margin-left: -65px;
+    }
+
+}
