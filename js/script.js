@@ -1,104 +1,145 @@
-// Obtém o elemento canvas do HTML
-const canvas = document.getElementById("boardGame");
-const context = canvas.getContext("2d");
-//let box = 32;
-
-const recorde_input = document.querySelector("#recorde_input");
-const div_instrucoes = document.querySelector("#div_instrucoes");
-const div_game = document.querySelector("#div_game");
-
-let recorde = 0;
-
-function mudar_valor(){
-    recorde++;
-    recorde_input.value = recorde;
-}
-
-function abrir_instrucoes(){
-    div_game.style.display="none";
-    div_instrucoes.style.display = "block";
-}
-
-function fechar_instrucoes(){
-    div_game.style.display="block";
-    div_instrucoes.style.display = "none";
-}
-
-// Variáveis do jogo
-const gridSize = 20;
-const gridSizeInPixels = canvas.width / gridSize;
-let snake = [
-    { x: gridSizeInPixels * 2, y: gridSizeInPixels },
-    { x: gridSizeInPixels, y: gridSizeInPixels },
-];
-let direction = "right";
-let food = {
-    x: Math.floor(Math.random() * 15 + 1) * gridSizeInPixels,
-    y: Math.floor(Math.random() * 15 + 1) * gridSizeInPixels
-}
-
-// Função para desenhar a cobra e a comida
-function drawSnake() {
-    context.fillStyle = "green";
-    snake.forEach(segment => {
-        context.fillRect(segment.x, segment.y, gridSizeInPixels, gridSizeInPixels);
-    });
-}
-
-function drawFood() {
-    context.fillStyle = "red";
-    context.fillRect(food.x, food.y, gridSizeInPixels, gridSizeInPixels);
-}
-
-// Função para atualizar o estado do jogo
-function update() {
-    // Lógica para mover a cobra
-
-    // Lógica para verificar colisões
-
-    // Lógica para comer a comida
-
-    // Lógica para desenhar a cobra e a comida
-
-    // Chamada recursiva para atualizar o estado do jogo
-    setTimeout(update, 100);
-}
-
-// Função para lidar com eventos de teclado
-function handleKeyPress(event) {
-    if (event.keyCode == 37 && direction != 'right') direction = 'left';
-    if (event.keyCode == 38 && direction != 'down') direction = 'up';
-    if (event.keyCode == 39 && direction != 'left') direction = 'right';
-    if (event.keyCode == 40 && direction != 'up') direction = 'down';
-}
-
-// Event listener para capturar eventos de teclado
-document.addEventListener("keydown", handleKeyPress);
-
-// Inicialização do jogo
-update();
-
-function moveSnake() {
-    var head = {x: snake[0].x, y: snake[0].y};
-    
-    if (direction == "left") {
-        head.x -= 1;
-    } else if (direction == "up") {
-        head.y -= 1;
-    } else if (direction == "right") {
-        head.x += 1;
-    } else if (direction == "down") {
-        head.y += 1;
-    }
-    
-    snake.unshift(head); // Adiciona a nova cabeça no início da cobra
-    snake.pop(); // Remove a cauda da cobra
-    
-    drawSnake(); // Redesenha a cobra na nova posição
-    }
+// // Obtém o elemento canvas do HTML
 
 function start(){
-    drawSnake();
-    drawFood();
-    //setInterval(moveSnake,5);
-}
+    //pegar o elemento canvas pelo ID  
+    let area = document.getElementById('boardGame');
+    
+    //capturar o quadro de pontuação
+    let recorde_input = document.getElementById('recorde_input');
+    let recorde = 0;
+    // define o contexto do elemento area para 2d
+    let ctx = area.getContext("2d");
+
+    document.addEventListener("keydown", keyPush);
+
+    setInterval(game, 70);
+
+
+    //Quantidade de casas que a cobra irá andar em cada atualização de quadro
+    const vel = 1;
+
+    //Velocidade inicial
+    let vx = 0;
+    let vy = 0; 
+    
+    //ponto inicial
+    let px = 10;
+    let py = 15;
+    
+    // Tamanho do ponto
+    const tp = 20;
+    
+    // quantidade de pontos
+    const qp = 20;
+    
+    // Eixo inicial da Maçã
+    let applex = 15;
+    let appley = 15;
+
+    // Array para o rastro da cobra
+    let trail = [];
+    let tail = 0; // cauda da cobra
+    
+    function game(){
+        px += vx;
+        py += vy;
+      
+      //controle da cobra dentro do quadro para repetição nas bordas
+        if (px < 0) {
+            px = qp-1;
+        }
+        if (px > qp-1) {
+            px = 0;
+        }
+        if (py < 0) {
+            py = qp-1;
+        }
+        if (py > qp-1) {
+            py = 0;
+        }
+
+    //sintaxe JavaScript:	contexto.fillRect ( x, y, largura, altura );
+        ctx.fillStyle = "#CCFF99";
+        ctx.fillRect(0,0, area.width, area.height);
+
+    // desenhando a maçã
+        ctx.fillStyle = "#EA2B1F";
+        ctx.fillRect(applex*tp, appley*tp, tp,tp,2,2);
+
+    //desenhando a cobra
+      //for ([expressaoInicial]; [condicao]; [incremento]) declaracao
+        for (let i = 0; i < trail.length; i++) {
+            ctx.fillStyle = "#1e7908";
+            ctx.strokeStyle = "#09BC8A";
+            ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
+            ctx.strokeRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
+                if (trail[i].x == px && trail[i].y == py){
+                    vx = vy = 0;
+                    tail = 2;
+                    gameOver(); //chama função de final de jogo
+                  }
+              }
+
+            trail.push({x:px,y:py});
+      
+            while (trail.length > tail) {
+                trail.shift();
+            }
+      
+            // quando a cobra come a maçã
+            if (applex==px && appley==py){
+                tail++; // aumenta a cauda
+                applex = Math.floor(Math.random()*qp);
+                appley = Math.floor(Math.random()*qp);
+                recorde++;
+                recorde_input.value = recorde;
+            }
+        }
+        // verifica qual tecla foi pressionada
+        window.addEventListener("keydown", function(e) {
+        // space and arrow keys
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+
+        let lastKeyPressed = "";
+
+        function keyPush(e){
+            switch (e.keyCode) {
+                case 37: // Equerda
+                    if(lastKeyPressed != "right"){ // verifica se tava no sentido oposto
+                        vx = -vel;
+                        vy = 0;
+                        lastKeyPressed = "left";
+                    }
+
+                break;
+                case 38: // cima
+                    if(lastKeyPressed != "down"){ // verifica se tava no sentido oposto
+                        vx = 0;
+                        vy = -vel;
+                        lastKeyPressed = "up";
+                    }
+                break;
+                case 39: // direita
+                    if(lastKeyPressed != "left"){ // verifica se tava no sentido oposto
+                        vx = vel;
+                        vy = 0;
+                        lastKeyPressed = "right";
+                    }
+                break;
+                case 40: // baixo
+                    if(lastKeyPressed != "up"){
+                        vx = 0;
+                        vy = vel;
+                        lastKeyPressed = "down";
+                    }
+                break;
+            }
+        }
+    }
+
+    function gameOver(){
+        //implemantar função de jogo terminado
+    }

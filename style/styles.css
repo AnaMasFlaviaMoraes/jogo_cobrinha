@@ -4,10 +4,9 @@
 }
 
 body{
-    background-image: url("./fundo.jpg");
+    background-image: url("./images/fundo.jpg");
     display: flex;
 }
-
 #div_game{
     width: 1000px;
     height: 600px;
