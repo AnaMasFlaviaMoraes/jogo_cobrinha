@@ -22,11 +22,19 @@
     </div>
     <div id="div_game">
         <div id="div_recordes">
-            <h5>Recordes</h5>
+            <h5>Score</h5>
             <input type="text" name="recorde" id="recorde_input" value="0">
         </div>
         <button class="btn btn-green" id="start" onclick="start()">Iniciar</button> 
         <canvas id="boardGame" width="512" height="512"></canvas>
+    </div>
+
+    <div id="game_over">
+        <h3>GAME OVER</h3>
+        <div id="best_recordes">
+            <button class="btn btn-red" id="new_game" onclick="newGame()">Novo Jogo</button>   
+        </div>
+        
     </div>
     
     <script src="../js/script.js"></script>

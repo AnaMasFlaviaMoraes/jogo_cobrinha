@@ -1,18 +1,24 @@
-// // Obtém o elemento canvas do HTML
+let area = document.getElementById('boardGame');
+let div_game = document.getElementById('div_game');
+let div_instrucoes = document.getElementById('div_instrucoes');
+let recorde_input = document.getElementById('recorde_input');
+let div_game_over = document.getElementById('game_over');
+let best_recordes = document.getElementById('best_recordes');
+let new_game = document.getElementById('new_game');
+let button_start = document.getElementById('start');
+
+let recorde = 0;
+
+mordida = new Audio("../style/sounds/mordida.mp3");
+game_over = new Audio("../style/sounds/game_over.mp3");
 
 function start(){
-    //pegar o elemento canvas pelo ID  
-    let area = document.getElementById('boardGame');
-    
-    //capturar o quadro de pontuação
-    let recorde_input = document.getElementById('recorde_input');
-    let recorde = 0;
+    button_start.disabled = true;
     // define o contexto do elemento area para 2d
     let ctx = area.getContext("2d");
 
-    document.addEventListener("keydown", keyPush);
+    document.addEventListener("keydown", changeDirection);
 
-    setInterval(game, 70);
 
 
     //Quantidade de casas que a cobra irá andar em cada atualização de quadro
@@ -36,12 +42,14 @@ function start(){
     let applex = 15;
     let appley = 15;
 
+    //15==10 && 15==15
+
     // Array para o rastro da cobra
     let trail = [];
     let tail = 0; // cauda da cobra
     
     function game(){
-        px += vx;
+        px += vx; 
         py += vy;
       
       //controle da cobra dentro do quadro para repetição nas bordas
@@ -67,79 +75,112 @@ function start(){
         ctx.fillRect(applex*tp, appley*tp, tp,tp,2,2);
 
     //desenhando a cobra
-      //for ([expressaoInicial]; [condicao]; [incremento]) declaracao
         for (let i = 0; i < trail.length; i++) {
             ctx.fillStyle = "#1e7908";
             ctx.strokeStyle = "#09BC8A";
             ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
             ctx.strokeRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
-                if (trail[i].x == px && trail[i].y == py){
-                    vx = vy = 0;
-                    tail = 2;
-                    gameOver(); //chama função de final de jogo
-                  }
-              }
-
-            trail.push({x:px,y:py});
-      
-            while (trail.length > tail) {
-                trail.shift();
-            }
-      
-            // quando a cobra come a maçã
-            if (applex==px && appley==py){
-                tail++; // aumenta a cauda
-                applex = Math.floor(Math.random()*qp);
-                appley = Math.floor(Math.random()*qp);
-                recorde++;
-                recorde_input.value = recorde;
+            if (trail[i].x == px && trail[i].y == py){
+                vx = vy = 0;
+                tail = 2;
+                gameOver(); //chama função de final de jogo
             }
         }
-        // verifica qual tecla foi pressionada
-        window.addEventListener("keydown", function(e) {
-        // space and arrow keys
-            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-                e.preventDefault();
-            }
-        }, false);
 
-        let lastKeyPressed = "";
-
-        function keyPush(e){
-            switch (e.keyCode) {
-                case 37: // Equerda
-                    if(lastKeyPressed != "right"){ // verifica se tava no sentido oposto
-                        vx = -vel;
-                        vy = 0;
-                        lastKeyPressed = "left";
-                    }
-
-                break;
-                case 38: // cima
-                    if(lastKeyPressed != "down"){ // verifica se tava no sentido oposto
-                        vx = 0;
-                        vy = -vel;
-                        lastKeyPressed = "up";
-                    }
-                break;
-                case 39: // direita
-                    if(lastKeyPressed != "left"){ // verifica se tava no sentido oposto
-                        vx = vel;
-                        vy = 0;
-                        lastKeyPressed = "right";
-                    }
-                break;
-                case 40: // baixo
-                    if(lastKeyPressed != "up"){
-                        vx = 0;
-                        vy = vel;
-                        lastKeyPressed = "down";
-                    }
-                break;
-            }
+        trail.push({x:px,y:py});
+      
+        while (trail.length > tail) {
+            trail.shift();
+        }
+      
+        // quando a cobra come a maçã
+        if (applex==px && appley==py){
+            tail++; // aumenta a cauda
+            mordida.play();
+            applex = Math.floor(Math.random()*qp);
+            appley = Math.floor(Math.random()*qp);
+            recorde++;
+            recorde_input.value = recorde;
         }
     }
 
-    function gameOver(){
-        //implemantar função de jogo terminado
+    let lastKeyPressed = "";
+
+    function changeDirection(e){
+        switch (e.keyCode) {
+            case 37: // Equerda
+                if(lastKeyPressed != "right"){ // verifica se tava no sentido oposto
+                    vx = -vel;
+                    vy = 0;
+                    lastKeyPressed = "left";
+                }
+
+            break;
+            case 38: // cima
+                if(lastKeyPressed != "down"){ // verifica se tava no sentido oposto
+                    vx = 0;
+                    vy = -vel;
+                    lastKeyPressed = "up";
+                }
+            break;
+            case 39: // direita
+                if(lastKeyPressed != "left"){ // verifica se tava no sentido oposto
+                    vx = vel;
+                    vy = 0;
+                    lastKeyPressed = "right";
+                }
+            break;
+            case 40: // baixo
+                if(lastKeyPressed != "up"){
+                    vx = 0;
+                    vy = vel;
+                    lastKeyPressed = "down";
+                }
+            break;
+        }
     }
+    intervalo = setInterval(game, 70);
+}
+
+function gameOver(){
+    let best = localStorage.getItem("best_record");
+    let isTheBest = false;
+    if(best < recorde){
+        localStorage.clear();
+        //salva a nova maior pontuação
+        localStorage.setItem("best_record", recorde);
+        isTheBest = true;
+    }
+    game_over.play();
+    clearInterval(intervalo);
+    div_game.style.display = "none";
+    div_game_over.style.display = "block";
+    div_instrucoes.style.display = "none";
+    button_start.disabled = false;
+    if(isTheBest){
+        best_recordes.innerHTML += "<h2 id='best'>Novo recorde: "+recorde+"</h2><br>"; 
+    }
+    best_recordes.innerHTML += "<h2>Score: "+recorde+"</h2>";
+
+}
+
+function abrir_instrucoes(){
+    div_game.style.display = "none";
+    div_game_over.style.display = "none";
+    div_instrucoes.style.display = "block";
+
+}
+
+function fechar_instrucoes(){
+    div_game.style.display = "block";
+    div_game_over.style.display = "none";
+    div_instrucoes.style.display = "none";
+}
+
+function newGame(){
+    div_game.style.display = "block";
+    div_game_over.style.display = "none";
+    div_instrucoes.style.display = "none";
+    window.location.href = "../pages/index.html";
+}
+
