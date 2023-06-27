@@ -14,12 +14,9 @@ game_over = new Audio("../style/sounds/game_over.mp3");
 
 function start(){
     button_start.disabled = true;
-    // define o contexto do elemento area para 2d
     let ctx = area.getContext("2d");
 
     document.addEventListener("keydown", changeDirection);
-
-
 
     //Quantidade de casas que a cobra irá andar em cada atualização de quadro
     const vel = 1;
@@ -32,19 +29,14 @@ function start(){
     let px = 10;
     let py = 15;
     
-    // Tamanho do ponto
-    const tp = 20;
-    
-    // quantidade de pontos
-    const qp = 20;
+    // Variável que representa um quadrado/pixel do gráfico
+    const pixel = Math.floor(Math.sqrt(area.width));
+    const qtdPixels =  Math.floor(Math.sqrt(area.width));
     
     // Eixo inicial da Maçã
     let applex = 15;
     let appley = 15;
 
-    //15==10 && 15==15
-
-    // Array para o rastro da cobra
     let trail = [];
     let tail = 0; // cauda da cobra
     
@@ -54,32 +46,32 @@ function start(){
       
       //controle da cobra dentro do quadro para repetição nas bordas
         if (px < 0) {
-            px = qp-1;
+            px = qtdPixels-1;
         }
-        if (px > qp-1) {
+        if (px > qtdPixels-1) {
             px = 0;
         }
         if (py < 0) {
-            py = qp-1;
+            py = qtdPixels-1;
         }
-        if (py > qp-1) {
+        if (py > qtdPixels-1) {
             py = 0;
         }
 
-    //sintaxe JavaScript:	contexto.fillRect ( x, y, largura, altura );
+        // area total que cobra e maçã terão 
         ctx.fillStyle = "#CCFF99";
         ctx.fillRect(0,0, area.width, area.height);
 
     // desenhando a maçã
         ctx.fillStyle = "#EA2B1F";
-        ctx.fillRect(applex*tp, appley*tp, tp,tp,2,2);
+        ctx.fillRect(applex*pixel, appley*pixel, pixel,pixel,2,2);
 
     //desenhando a cobra
         for (let i = 0; i < trail.length; i++) {
             ctx.fillStyle = "#1e7908";
             ctx.strokeStyle = "#09BC8A";
-            ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
-            ctx.strokeRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
+            ctx.fillRect(trail[i].x*pixel, trail[i].y*pixel, pixel,pixel);
+            ctx.strokeRect(trail[i].x*pixel, trail[i].y*pixel, pixel,pixel);
             if (trail[i].x == px && trail[i].y == py){
                 vx = vy = 0;
                 tail = 2;
@@ -97,8 +89,8 @@ function start(){
         if (applex==px && appley==py){
             tail++; // aumenta a cauda
             mordida.play();
-            applex = Math.floor(Math.random()*qp);
-            appley = Math.floor(Math.random()*qp);
+            applex = Math.floor(Math.random()*qtdPixels);
+            appley = Math.floor(Math.random()*qtdPixels);
             recorde++;
             recorde_input.value = recorde;
         }
@@ -109,7 +101,7 @@ function start(){
     function changeDirection(e){
         switch (e.keyCode) {
             case 37: // Equerda
-                if(lastKeyPressed != "right"){ // verifica se tava no sentido oposto
+                if(lastKeyPressed != "right"){ 
                     vx = -vel;
                     vy = 0;
                     lastKeyPressed = "left";
@@ -117,14 +109,14 @@ function start(){
 
             break;
             case 38: // cima
-                if(lastKeyPressed != "down"){ // verifica se tava no sentido oposto
+                if(lastKeyPressed != "down"){ 
                     vx = 0;
                     vy = -vel;
                     lastKeyPressed = "up";
                 }
             break;
             case 39: // direita
-                if(lastKeyPressed != "left"){ // verifica se tava no sentido oposto
+                if(lastKeyPressed != "left"){ 
                     vx = vel;
                     vy = 0;
                     lastKeyPressed = "right";
