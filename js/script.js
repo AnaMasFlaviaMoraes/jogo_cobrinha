@@ -6,6 +6,7 @@ let div_game_over = document.getElementById('game_over');
 let best_recordes = document.getElementById('best_recordes');
 let new_game = document.getElementById('new_game');
 let button_start = document.getElementById('start');
+let div_dica = document.getElementById('dica');
 
 let recorde = 0;
 
@@ -14,6 +15,7 @@ game_over = new Audio("../style/sounds/game_over.mp3");
 
 function start(){
     button_start.disabled = true;
+    div_dica.style.display = "block";
     let ctx = area.getContext("2d");
 
     document.addEventListener("keydown", changeDirection);
@@ -99,6 +101,7 @@ function start(){
     let lastKeyPressed = "";
 
     function changeDirection(e){
+        div_dica.style.display = "none";
         switch (e.keyCode) {
             case 37: // Equerda
                 if(lastKeyPressed != "right"){ 
